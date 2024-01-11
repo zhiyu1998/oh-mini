@@ -1,5 +1,5 @@
 <div align="center">
- <img width="180px" src="https://github.com/zhiyu1998/oh-mini/tree/main/public/assets/logo-128.png">
+ <img width="180px" src="./public/assets/logo-128.png">
     <p/>
  <h1>Oh! Mini!  - Bookmark, History, Tab Manager</h1>
 </div>
