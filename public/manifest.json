@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "Oh! Mini - Bookmark, History, & Tab Manager",
+  "description": "Next-generation in-page shortcut search efficiency tool.",
+  "offline_enabled": true,
+  "version": "1.0.0",
+  "action": {
+    "default_icon": "assets/logo-16.png"
+  },
+  "icons": {
+    "16": "assets/logo-16.png",
+    "48": "assets/logo-48.png",
+    "128": "assets/logo-128.png"
+  },
+  "commands": {
+    "open-omni": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+K",
+        "mac": "Command+K"
+      },
+      "description": "Open command menu"
+    }
+  },
+  "content_scripts": [
+    {
+      "js": ["js/vendor.js", "js/content.js", "js/newtab.js"],
+      "css": ["newtab.css"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  "background": {
+    "service_worker": "js/background.js"
+  },
+  "permissions": [
+    "tabs", "activeTab", "bookmarks", "browsingData", "history", "scripting", "search"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources":  ["assets/*", "newtab.css"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
