@@ -1,4 +1,5 @@
 import {Action} from "../../types/Action";
+import {orderActions} from "../../utils/actions";
 
 interface SearchStrategy {
     execute(value: string, actions?: Action[]): Promise<Action[]>;
@@ -43,10 +44,18 @@ class TabSearchStrategy implements SearchStrategy {
     }
 }
 
+class OrderSearchStrategy implements SearchStrategy {
+    execute(value: string, actions?: Action[]): Promise<Action[]> {
+        return new Promise((resolve, reject) => {
+            resolve(orderActions);
+        });
+    }
+}
+
 class DefaultSearchStrategy implements SearchStrategy {
     execute(value: string, actions?: Action[]): Promise<Action[]> {
         return new Promise((resolve, reject) => {
-            resolve(actions!);
+            resolve(actions!.filter(item => item.title?.includes(value)));
         });
     }
 }
@@ -54,7 +63,7 @@ class DefaultSearchStrategy implements SearchStrategy {
 export class SearchStrategyFactory {
     static createStrategy(value: string): SearchStrategy {
         if (value === '/') {
-            return new DefaultSearchStrategy();
+            return new OrderSearchStrategy();
         } else if (value.startsWith('/history')) {
             return new HistorySearchStrategy();
         } else if (value.startsWith('/bookmark')) {
