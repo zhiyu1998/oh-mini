@@ -1,7 +1,7 @@
 <div align="center">
  <img width="180px" src="./public/assets/logo-128.png">
     <p/>
- <h3>Oh! Mini!  - Bookmark, History, Tab Manager</h3>
+ <h3>Oh! Mini  - Bookmark, History, Tab Manager</h3>
 </div>
 
 [中文] [\[English\]](./docs/README-EN.md) 

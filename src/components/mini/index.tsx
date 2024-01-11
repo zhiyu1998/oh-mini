@@ -6,7 +6,7 @@ import ActiveIndexContext from '../../context/ActiveIndexContext';
 import MiniSearchInputContext from '../../context/MiniSearchInputContext';
 import { Action } from '../../types/Action';
 import MiniToast from './toast';
-import { orderActions } from '../../utils/actions';
+import {SearchStrategyFactory} from "./strategys";
 
 const MiniComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -58,25 +58,10 @@ const MiniComponent = () => {
     const value = inputRef.current!.value;
     // eg. /b -> /bookmark
     inputRef.current.value = translateShortHand(value);
-    // query param
-    let query = '';
-    if (value.startsWith('/') && value.length == 1) {
-      setFilteredActions(orderActions);
-    } else if (value.startsWith('/history')) {
-      query = value.replace('/history ', '');
-      chrome.runtime.sendMessage({ request: 'search-history', query: query }, response => {
-        setFilteredActions(response.history);
-      });
-    } else if (value.startsWith('/bookmark')) {
-      query = value.replace('/bookmark ', '');
-      chrome.runtime.sendMessage({ request: 'search-bookmarks', query: query }, response => {
-        setFilteredActions(response.bookmarks);
-      });
-    } else if (value.startsWith('/tab')) {
-      setFilteredActions(actions.filter(item => item.action === 'switch-tab'));
-    } else {
-      setFilteredActions(actions);
-    }
+    // search actions
+    SearchStrategyFactory.createStrategy(value).execute(value, actions).then(item => {
+        setFilteredActions(item);
+    });
     setActionElements(ActionElements(filteredActions));
   };
 
