@@ -1,7 +1,7 @@
 <div align="center">
  <img width="180px" src="./public/assets/logo-128.png">
     <p/>
- <h1>Oh! Mini!  - Bookmark, History, Tab Manager</h1>
+ <h3>Oh! Mini!  - Bookmark, History, Tab Manager</h3>
 </div>
 
 [中文] [\[English\]](./docs/README-EN.md) 
@@ -15,9 +15,10 @@
 - [x] 书签搜索
 - [x] 历史记录搜索
 - [x] 标签搜索
+- [ ] 图标重构
 - [ ] 基于Google、Bing搜索引擎的网页搜索
 - [ ] AI搜索
-- ...
+...
 
 ## 开发流程
 1. 安装依赖
