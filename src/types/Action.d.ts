@@ -1,3 +1,6 @@
+/**
+ * 操作事件
+ */
 export interface Action {
   id?: string;
   url?: string;

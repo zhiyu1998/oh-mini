@@ -6,7 +6,7 @@ import ActiveIndexContext from '../../context/ActiveIndexContext';
 import MiniSearchInputContext from '../../context/MiniSearchInputContext';
 import { Action } from '../../types/Action';
 import MiniToast from './toast';
-import {SearchStrategyFactory} from "./strategys";
+import { SearchStrategyFactory } from '../../utils/strategys';
 
 const MiniComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -59,9 +59,11 @@ const MiniComponent = () => {
     // eg. /b -> /bookmark
     inputRef.current.value = translateShortHand(value);
     // search actions
-    SearchStrategyFactory.createStrategy(value).execute(value, actions).then(item => {
+    SearchStrategyFactory.createStrategy(value)
+      .execute(value, actions)
+      .then(item => {
         setFilteredActions(item);
-    });
+      });
     setActionElements(ActionElements(filteredActions));
   };
 

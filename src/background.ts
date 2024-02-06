@@ -5,12 +5,12 @@ import { processMacActions } from './utils/commonUtils';
 
 let actions: Action[] = [];
 
-// Check when the extension button is clicked.
+// 监听点击事件
 chrome.action.onClicked.addListener(tab => {
   chrome.tabs.sendMessage(tab.id!, { request: 'open-mini' });
 });
 
-// Open on install
+// 监听插件被安装
 chrome.runtime.onInstalled.addListener(object => {
   // Check if the extension is being installed
   if (object.reason === 'install') {
@@ -18,14 +18,14 @@ chrome.runtime.onInstalled.addListener(object => {
   }
 });
 
-// Listen for the open mini shortcut
-chrome.commands.onCommand.addListener((command) => {
-    utils.getCurrentTab().then((response) => {
-        chrome.tabs.sendMessage(response.id!, {request: "open-mini"});
-    });
+// 监听快捷键打开
+chrome.commands.onCommand.addListener(command => {
+  utils.getCurrentTab().then(response => {
+    chrome.tabs.sendMessage(response.id!, { request: 'open-mini' });
+  });
 });
 
-// Receive messages from any tab
+// 监听每个事件对应的函数
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   switch (message.request) {
     case 'get-actions':
@@ -174,7 +174,7 @@ function restoreNewTab(newtaburl: string) {
   });
 }
 
-// Clear actions and append default ones
+// 清除操作并添加默认操作
 const clearActions = () => {
   utils.getCurrentTab().then(response => {
     actions = [];
@@ -228,7 +228,7 @@ const clearActions = () => {
   });
 };
 
-// Get tabs to populate in the actions
+// 获取选项卡以填充操作
 const getTabs = () => {
   chrome.tabs.query({}, tabs => {
     tabs.forEach(tab => {
@@ -248,7 +248,7 @@ const resetMini = () => {
   actions = searchActions.concat(actions);
 };
 
-// Check if tabs have changed and actions need to be fetched again
+// 检查选项卡是否已更改，是否需要再次获取操作
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => resetMini());
 chrome.tabs.onCreated.addListener(tab => resetMini());
 chrome.tabs.onRemoved.addListener((tabId, changeInfo) => resetMini());

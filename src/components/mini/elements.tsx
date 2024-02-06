@@ -2,18 +2,23 @@ import React from 'react';
 import { Action } from '../../types/Action';
 import MiniItem from './item';
 
-const ActionElements: (actions: Action[]) => JSX.Element[] = (actions) => {
-    return actions.map((action, index) => {
-        let keys: React.JSX.Element;
-        if (action.keycheck && action.keys) {
-            keys = (
-                <div className="mini-keys">
-                    {action.keys.map(key => (
-                        <span className="mini-shortcut">{key}</span>
-                    ))}
-                </div>
-            );
-        }
+/**
+ * 下拉框渲染
+ * @param actions
+ * @constructor
+ */
+const ActionElements: (actions: Action[]) => JSX.Element[] = actions => {
+  return actions.map((action, index) => {
+    let keys: React.JSX.Element;
+    if (action.keycheck && action.keys) {
+      keys = (
+        <div className="mini-keys">
+          {action.keys.map(key => (
+            <span className="mini-shortcut">{key}</span>
+          ))}
+        </div>
+      );
+    }
 
     const img = action.emoji ? (
       <span className="mini-emoji-action">{action.emojiChar}</span>

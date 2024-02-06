@@ -1,17 +1,16 @@
 // Get the current tab
 import { Action } from '../types/Action';
-import { addhttp } from './commonUtils';
-import {InputValue} from "../types/InputValue";
-import {renderActions} from "./actions";
+import { InputValue } from '../types/InputValue';
+import { renderActions } from './actions';
 
-const getCurrentTab = async () => {
+export const getCurrentTab = async () => {
   const queryOptions = { active: true, currentWindow: true };
   const [tab] = await chrome.tabs.query(queryOptions);
   return tab;
 };
 
 // Get bookmarks to populate in the actions
-const getBookmarks = () => {
+export const getBookmarks = () => {
   let bookMarks: Action[] = [];
   const process_bookmark = (bookmarks: chrome.bookmarks.BookmarkTreeNode[]) => {
     for (const bookmark of bookmarks) {
@@ -39,33 +38,33 @@ const getBookmarks = () => {
 };
 
 // Lots of different actions
-const switchTab = (tab: chrome.tabs.Tab) => {
+export const switchTab = (tab: chrome.tabs.Tab) => {
   chrome.tabs.highlight({
     tabs: tab.index,
     windowId: tab.windowId,
   });
   chrome.windows.update(tab.windowId, { focused: true });
 };
-const goBack = (tab: chrome.tabs.Tab) => {
+export const goBack = (tab: chrome.tabs.Tab) => {
   if (tab.id !== undefined) {
     chrome.tabs.goBack(tab.id);
   } else {
     console.error('Tab ID is undefined.');
   }
 };
-const goForward = (tab: chrome.tabs.Tab) => {
+export const goForward = (tab: chrome.tabs.Tab) => {
   if (tab.id !== undefined) {
     chrome.tabs.goForward(tab.id);
   } else {
     console.error('Tab ID is undefined.');
   }
 };
-const duplicateTab = (tab: chrome.tabs.Tab) => {
+export const duplicateTab = (tab: chrome.tabs.Tab) => {
   getCurrentTab().then(response => {
     chrome.tabs.duplicate(response.id!);
   });
 };
-const createBookmark = (tab: chrome.tabs.Tab) => {
+export const createBookmark = (tab: chrome.tabs.Tab) => {
   getCurrentTab().then(response => {
     chrome.bookmarks.create({
       title: response.title,
@@ -73,20 +72,20 @@ const createBookmark = (tab: chrome.tabs.Tab) => {
     });
   });
 };
-const muteTab = (mute: boolean | undefined) => {
+export const muteTab = (mute: boolean | undefined) => {
   getCurrentTab().then(response => {
     chrome.tabs.update(response.id!, { muted: mute });
   });
 };
-const reloadTab = () => {
+export const reloadTab = () => {
   chrome.tabs.reload();
 };
-const pinTab = (pin: boolean | undefined) => {
+export const pinTab = (pin: boolean | undefined) => {
   getCurrentTab().then(response => {
     chrome.tabs.update(response.id!, { pinned: pin });
   });
 };
-const clearAllData = () => {
+export const clearAllData = () => {
   chrome.browsingData.remove(
     {
       since: new Date().getTime(),
@@ -108,70 +107,44 @@ const clearAllData = () => {
     },
   );
 };
-const clearBrowsingData = () => {
+export const clearBrowsingData = () => {
   chrome.browsingData.removeHistory({ since: 0 });
 };
-const clearCookies = () => {
+export const clearCookies = () => {
   chrome.browsingData.removeCookies({ since: 0 });
 };
-const clearCache = () => {
+export const clearCache = () => {
   chrome.browsingData.removeCache({ since: 0 });
 };
-const clearLocalStorage = () => {
+export const clearLocalStorage = () => {
   chrome.browsingData.removeLocalStorage({ since: 0 });
 };
-const clearPasswords = () => {
+export const clearPasswords = () => {
   chrome.browsingData.removePasswords({ since: 0 });
 };
-const openChromeUrl = (url: string) => {
+export const openChromeUrl = (url: string) => {
   chrome.tabs.create({ url: 'chrome://' + url + '/' });
 };
-const openIncognito = () => {
+export const openIncognito = () => {
   chrome.windows.create({ incognito: true });
 };
-const closeWindow = (id: number) => {
+export const closeWindow = (id: number) => {
   chrome.windows.remove(id);
 };
-const closeTab = (tab: chrome.tabs.Tab) => {
+export const closeTab = (tab: chrome.tabs.Tab) => {
   chrome.tabs.remove(tab.id!);
 };
-const closeCurrentTab = () => {
+export const closeCurrentTab = () => {
   getCurrentTab().then(closeTab);
 };
-const removeBookmark = (bookmark: chrome.bookmarks.BookmarkTreeNode) => {
+export const removeBookmark = (bookmark: chrome.bookmarks.BookmarkTreeNode) => {
   chrome.bookmarks.remove(bookmark.id);
 };
 
-const handleAction = (action: Action, searchInputValue?: InputValue) => {
+export const handleAction = (action: Action, searchInputValue?: InputValue) => {
   if (action.action == undefined) {
     return;
   }
   const act = renderActions[action.action];
   act(action, searchInputValue);
-};
-
-export {
-  getBookmarks,
-  switchTab,
-  goBack,
-  goForward,
-  duplicateTab,
-  createBookmark,
-  muteTab,
-  reloadTab,
-  pinTab,
-  clearAllData,
-  clearBrowsingData,
-  clearCookies,
-  clearCache,
-  clearLocalStorage,
-  clearPasswords,
-  openChromeUrl,
-  openIncognito,
-  closeWindow,
-  closeTab,
-  closeCurrentTab,
-  getCurrentTab,
-  removeBookmark,
-  handleAction,
 };
